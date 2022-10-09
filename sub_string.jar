@@ -1,0 +1,29 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> chars = new HashSet<>(128);
+        Deque<Character> deque = new LinkedList<Character>();
+        int result = 0;
+        int maxResult = 0;
+        for(char c: s.toCharArray()) {
+            Character character = Character.valueOf(c);
+            if (character.equals(deque.peekFirst())) {
+                deque.removeFirst();
+                chars.remove(character);
+            } else if (chars.contains(character)) {
+                Character polled = deque.pollFirst();
+                while (!character.equals(polled)) {
+                    chars.remove(polled);
+                    polled = deque.pollFirst();
+                }
+            }
+            deque.add(character);
+            chars.add(character);
+            int size = deque.size();
+            if (size > maxResult) {
+                maxResult = size;
+            }
+        }
+    
+        return maxResult;
+    }
+}
